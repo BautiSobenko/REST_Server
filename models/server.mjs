@@ -1,7 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 
-import {router} from '../routes/user.routes.mjs';
+import { userRouter } from '../routes/user.routes.mjs';
+import { authRouter } from '../routes/auth.routes.mjs';
+
 import { dbConnection } from '../database/config.mjs';
 
 class Server {
@@ -9,7 +11,9 @@ class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT;
+
         this.usersPath = '/api/users';
+        this.authPath = '/api/auth';
 
         this.conectarDB();
 
@@ -35,8 +39,9 @@ class Server {
     
     // Metodo de configuracion de endpoints
     async routes() {
-
-        this.app.use( this.usersPath, router );
+    
+        this.app.use( this.authPath, authRouter );
+        this.app.use( this.usersPath, userRouter );
     }
 
     listen() {

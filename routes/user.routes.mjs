@@ -1,22 +1,23 @@
 import { Router } from "express";
-import { usuariosGet, usuariosPost, usuariosPut, usuariosDelete } from "../controllers/user.mjs";
 import { check } from "express-validator";
 
-import { validarCampos } from "../middlewares/validar_campos.mjs";
+import { validarCampos, validarJWT, validarRole } from "../middlewares/imports.mjs";
+
+import { usuariosGet, usuariosPost, usuariosPut, usuariosDelete } from "../controllers/user.mjs";
 import { existsEmail, existsID, isInRole } from "../helpers/db-validatores.mjs";
 
 /**
  * El router se configura en un middleware para poner un endpoint comun.
  */
-const router = Router();
+const userRouter = Router();
 
-router.get('/', usuariosGet);
+userRouter.get('/', usuariosGet);
 
 /** 
  * _express-validator
  * Si hay errores se almacenan en la request, luego se verifican todos juntos en el controller.
  */
-router.post('/',[
+userRouter.post('/',[
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('correo', 'El correo no es valido').isEmail(),
     check('password', 'El password debe tener mas de 6 caracteres').isLength({min: 6}),
@@ -25,7 +26,7 @@ router.post('/',[
     validarCampos
 ],usuariosPost);
 
-router.put('/:id', [
+userRouter.put('/:id', [
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom( existsID ),
     check('correo', 'El correo no es valido').isEmail(),
@@ -35,12 +36,14 @@ router.put('/:id', [
     validarCampos
 ], usuariosPut);
 
-router.delete('/:id', [
+userRouter.delete('/:id', [
+    validarJWT,
+    validarRole('ADMIN_ROLE', 'VENTAS_ROLE'),
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom( existsID ),
     validarCampos
 ], usuariosDelete);
 
 export {
-    router
+    userRouter
 }

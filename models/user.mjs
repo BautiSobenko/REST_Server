@@ -41,6 +41,7 @@ const UserSchema = Schema({
 UserSchema.methods.toJSON = function() {
     // Extraigo del objeto que me devuelve el modelo, el __v, el password y el resto lo guardo en usuario.
     const { __v, password, _id, ...usuario } = this.toObject();
+    usuario.uid = _id
     return usuario;
 }
 
