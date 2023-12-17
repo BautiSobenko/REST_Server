@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "start": "node server.js",
-    "server": "nodemon server.js"
+    "start": "node app.mjs",
+    "server": "nodemon app.mjs"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
