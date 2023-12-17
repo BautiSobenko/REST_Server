@@ -1,6 +1,6 @@
-import { validarCampos } from "./validar_campos.mjs";
-import { validarJWT } from "./validar-jwt.mjs";
-import { validarRole } from "./validar_role.mjs";
+import { validarCampos } from "../middlewares/validar_campos.mjs";
+import { validarJWT } from "../middlewares/validar-jwt.mjs";
+import { validarRole } from "../middlewares/validar_role.mjs";
 
 export {
     validarCampos,
